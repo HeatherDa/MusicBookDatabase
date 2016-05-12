@@ -28,6 +28,8 @@ public class Main {
     static PreparedStatement delSong=null;
     static PreparedStatement delBook=null;
     static PreparedStatement delBook2=null;
+    static PreparedStatement searcherSongsFromBook;
+    static PreparedStatement searcherSongsWithBookInfo;
     static ResultSet rsSong=null;
     static ResultSet rsBook=null;
 
@@ -39,11 +41,11 @@ public class Main {
             setup();
 
             //set prepared statements
-            String sSolver = "SELECT * FROM Songs WHERE ? = ?";
+            String sSolver = "SELECT * FROM Songs WHERE Title = ?";//TODO fix all references to use 1 ? not two (doesn't work unless you hard code the table and column)
             searcherSong = connect.prepareStatement(sSolver);
-            String smSolver = "SELECT * FROM Songs WHERE ? = ? AND ? = ?";
+            String smSolver = "SELECT * FROM Songs WHERE Title = ? AND BookID = ?";
             searcherSongMulti=connect.prepareStatement(smSolver);
-            String bSolver = "SELECT * FROM Books WHERE ? = ?";
+            String bSolver = "SELECT * FROM Books WHERE Title = ?";
             searcherBook = connect.prepareStatement (bSolver);
             //new Song
             //Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument
@@ -51,13 +53,14 @@ public class Main {
             String nSong= "INSERT INTO Songs (Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             newSong=connect.prepareStatement(nSong);
             //new Book
-            String nBook= "INSERT INTO Books (Title, Location) VALUES(?,?)";//title, Location
+            //string, string
+            String nBook= "INSERT INTO Books (Title, Location) VALUES(?,?)";
             newBook=connect.prepareStatement(nBook);
             //change Song
-            String cSong="UPDATE Songs SET ? = ? WHERE SongID=?";
+            String cSong="UPDATE Songs SET ? = ? WHERE SongID=?";//TODO how will this work when I have to hardcode the column names?
             changeSong=connect.prepareStatement(cSong);
             //change Book
-            String cBook="UPDATE Books SET ? = ? WHERE BookID=?";
+            String cBook="UPDATE Books SET ? = ? WHERE BookID=?";//TODO how will this work when I have to hardcode the column names?
             changeBook=connect.prepareStatement(cBook);
             //delete Song
             String dSong="DELETE FROM Songs WHERE SongID=?";
@@ -67,11 +70,17 @@ public class Main {
             delBook=connect.prepareStatement(dBook);
             String dBook2="DELETE FROM Songs WHERE BookID=?";
             delBook2=connect.prepareStatement(dBook2);
-
+            //to generate result set for display
+            //all songs of a book
+            String displayTablesOnBook="Select songs.title, songs.composer, songs.FirstPage, songs.Lyrics, books.title, books.location FROM songs INNER JOIN books ON songs.BookID = books.BookID WHERE books.Title = ?";
+            searcherSongsFromBook=connect.prepareStatement(displayTablesOnBook);
+            //all songs in database with their book information
+            String displayTablesOnSong="Select songs.title, songs.composer, songs.FirstPage, songs.Lyrics, books.title, books.location FROM songs INNER JOIN books ON songs.BookID = books.BookID";
+            searcherSongsWithBookInfo=connect.prepareStatement(displayTablesOnSong);
 
             //loadAllData(); TODO write function
-            loadAllSongData();
-            loadAllBookData();
+            //loadAllSongData();
+            //loadAllBookData();
             addTestData();
             //make TableModel
             //MusicBookDataModel mB=new MusicBookDataModel(rs);
@@ -85,12 +94,12 @@ public class Main {
         }
 
     }
-    public static void addSong(String title, String composer, int bookID, String genre, String style, String time, String key, Integer firstPage, Integer totalPage, Boolean lyrics, String lowestNote, String highestNote, String format, String instrument){
+    public static void addSong(String title, String composer, int bookID, String genre, String style, String time, String key, Integer firstPage, Integer totalPages, Boolean lyrics, String lowestNote, String highestNote, String format, String instrument){
         try {
-            searcherSongMulti.setString(1, "Title");
-            searcherSongMulti.setString(2, title);
-            searcherSongMulti.setString(3, "BookID");
-            searcherSongMulti.setInt(4, bookID);
+            //searcherSongMulti.setString(1, "Title");
+            searcherSongMulti.setString(1, title);//1 would be 2 if the statement worked as it ought to.
+            //searcherSongMulti.setString(3, "BookID");
+            searcherSongMulti.setInt(2, bookID);//would be 4
 
             ResultSet searchR = searcherSongMulti.executeQuery();//look for an entry with this name in this book
             int resultsCounter = 0;
@@ -108,7 +117,7 @@ public class Main {
                 newSong.setString(6, time);
                 newSong.setString(7, key);
                 newSong.setInt(8, firstPage);
-                newSong.setInt(9, totalPage);
+                newSong.setInt(9, totalPages);
                 newSong.setBoolean(10, lyrics);
                 newSong.setString(11, lowestNote);
                 newSong.setString(12, highestNote);
@@ -128,8 +137,8 @@ public class Main {
 
     public static void addBook(String title, String location){
         try {
-            searcherBook.setString(1, "Title");
-            searcherBook.setString(2, title);
+            //searcherBook.setString(1, "Title");
+            searcherBook.setString(1, title);
 
             ResultSet searchR = searcherBook.executeQuery();//look for this book to avoid entering twice
             int resultsCounter = 0;
@@ -216,21 +225,16 @@ public class Main {
         try {
             connect = DriverManager.getConnection(DB_CONNECTION_URL, USER, PASSWORD);
             statement = connect.createStatement();
-            System.out.println(statement);
-            //String makeTable= "CREATE TABLE if NOT EXISTS Songs (first int, second VARCHAR (10), third double)";
-            //statement.executeUpdate(makeTable);
+
             tableNames.add("Songs");
             tableNames.add("Books");
-            System.out.println(tableNames.get(0)+" first position, "+tableNames.get(1)+" second position");
             boolean tableExists;
             for (String tableName:tableNames) {
                 tableExists=false;
                 String checkTablePresentQuery = "SHOW TABLES LIKE '" + tableName + "'";
-                System.out.println(checkTablePresentQuery);
                 ResultSet tablesRS = statement.executeQuery(checkTablePresentQuery);
                 if (tablesRS.next()) {
                     tableExists = true;
-                    System.out.println("table exists");
                 }
 
 
@@ -239,13 +243,10 @@ public class Main {
                     if (tableName.equalsIgnoreCase("Songs")){
                         //Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument
                         //String, String, int, String, String, String, String, int, int, Boolean, String, String, String, String
-                        String newTable = "CREATE TABLE if NOT EXISTS Songs (SongID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, LastPage int, Lyrics BOOLEAN NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
-                        System.out.println(newTable);
+                        String newTable = "CREATE TABLE if NOT EXISTS Songs (SongID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, TotalPages int, Lyrics BOOLEAN NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
                         statement.executeUpdate(newTable);
-                        System.out.println("created new song table");
                     }else if (tableName.equalsIgnoreCase("Books")) {
-                        String newTable = "CREATE TABLE if NOT EXISTS Books (BookID int NOT NULL AUTO_INCREMENMT, Title VARCHAR (100), Location VARCHAR (15), PRIMARY KEY (BookID))";
-                        System.out.println("created new book table");
+                        String newTable = "CREATE TABLE if NOT EXISTS Books (BookID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Location VARCHAR (50), PRIMARY KEY (BookID))";
                         statement.executeUpdate(newTable);
                     }
                 }
@@ -271,13 +272,13 @@ public class Main {
             String getAllData = "SELECT * FROM Songs";
             rsSong = statement.executeQuery(getAllData);
 
-           /* if (songDataModel == null) {
+            if (songDataModel == null) {
                 //If no current songDataModel, then make one
                 songDataModel = new SongDataModel(rsSong);
             } else {
                 //Or, if one already exists, update its ResultSet
                 songDataModel.updateResultSet(rsSong);
-            }*/
+            }
 
             return true;
 
@@ -301,13 +302,13 @@ public class Main {
             String getAllData = "SELECT * FROM Books";
             rsBook = statement.executeQuery(getAllData);
 
-            /*if (bookDataModel == null) {
+            if (bookDataModel == null) {
                 //If no current bookDataModel, then make one
                 bookDataModel = new BookDataModel(rsBook);
             } else {
                 //Or, if one already exists, update its ResultSet
                 bookDataModel.updateResultSet(rsBook);
-            }*/
+            }
 
             return true;
 
@@ -327,6 +328,8 @@ public class Main {
             //Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, LastPage int, Lyrics BOOLEAN NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
             ArrayList song1 = new ArrayList(Arrays.asList("Amarilli, mia bella", "Giulio Caccini", 1, "Classical", "Romantic", "4/4", "C major", 9, 5, true, "1low B", "1High D","Book", "Piano"));//number is what octave above or below middle C octave
             testDataSong.add(song1);
+            ArrayList song2 = new ArrayList(Arrays.asList("'Tis a Gift to Be Simple", "Traditional", 2, "Folk", "American Quaker", "4/4", "G major", 1, 1, true, "C", "1High C", "Paper", "Piano" ));
+            testDataSong.add(song2);
             ArrayList book1 = new ArrayList(Arrays.asList("26 Italian Songs and Arias", "Livingroom 1D"));
             testDataBook.add(book1);
             ArrayList paper = new ArrayList(Arrays.asList("Loose Papers", "Livingroom 1C"));
@@ -334,10 +337,11 @@ public class Main {
 
             //add test data to table
             for (ArrayList songs : testDataSong) {//test if this entry is already in the database
-                searcherSong.setString(1, "Title");//column name
-                searcherSong.setString(2, (String) songs.get(0));//Title of song is in first position after auto number.  TODO check if this is the right index
+                //searcherSong.setString(1, "Title");//column name
+                searcherSong.setString(1, (String) songs.get(0));//Title of song is in first position
                 ResultSet searchR = searcherSong.executeQuery();//look for an entry with this name
                 int count = 0;
+
                 while (searchR.next()) {
                     count++;
                 }
@@ -360,17 +364,19 @@ public class Main {
                     newSong.executeUpdate();
                 }
             }
-            for (ArrayList book : testDataBook) {
-                searcherBook.setString(1, "Title");
-                searcherBook.setString(2, (String) book.get(0));
-                ResultSet searchR = searcherBook.executeQuery();
+            for (ArrayList books : testDataBook) {
+                //searcherBook.setString(1, "Title");
+                searcherBook.setString(1, (String) books.get(0));
+                ResultSet searchRB = searcherBook.executeQuery();
+
                 int count = 0;
-                while (searchR.next()) {
+                while (searchRB.next()) {
                     count++;
                 }
                 if (count == 0) {
-                    newBook.setString(1, (String) book.get(0));
-                    newBook.setString(2, (String) book.get(1));
+                    newBook.setString(1, (String) books.get(0));
+                    newBook.setString(2, (String) books.get(1));
+                    newBook.executeUpdate();
                 }
             }
         } catch (SQLException se) {
