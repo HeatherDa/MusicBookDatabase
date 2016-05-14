@@ -28,8 +28,13 @@ public class Main {
     static PreparedStatement delSong=null;
     static PreparedStatement delBook=null;
     static PreparedStatement delBook2=null;
-    static PreparedStatement searcherSongsFromBook;
+    static PreparedStatement searcherAllSongsFromBook;
     static PreparedStatement searcherSongsWithBookInfo;
+    static PreparedStatement searcherComposers;
+    static PreparedStatement searcherGenres;
+    static PreparedStatement searcherStyles;
+    static PreparedStatement searcherKeys;
+    static PreparedStatement searcherInstrument;
     static ResultSet rsSong=null;
     static ResultSet rsBook=null;
 
@@ -47,9 +52,29 @@ public class Main {
             searcherSongMulti=connect.prepareStatement(smSolver);
             String bSolver = "SELECT * FROM Books WHERE Title = ?";
             searcherBook = connect.prepareStatement (bSolver);
+            String allComposers="SELECT * FROM Songs WHERE Composer = ?";
+            searcherComposers = connect.prepareStatement (allComposers);
+            String allGenres="SELECT * FROM Songs WHERE Genre = ?";
+            searcherGenres = connect.prepareStatement (allGenres);
+            String allStyles="SELECT * FROM Songs WHERE Style = ?";
+            searcherStyles = connect.prepareStatement (allStyles);
+            String allKeys="SELECT * FROM Songs WHERE KeySignature = ?";
+            searcherKeys = connect.prepareStatement (allKeys);
+            String allInstruments="SELECT * FROM Songs WHERE Instrument = ?";
+            searcherInstrument = connect.prepareStatement (allInstruments);
+            //to generate result set for display
+            //all songs of a book
+            String displayTablesOnBook="Select songs.title, songs.composer, songs.FirstPage, songs.Lyrics, books.title, books.location FROM songs INNER JOIN books ON songs.BookID = books.BookID WHERE books.Title = ?";
+            searcherAllSongsFromBook=connect.prepareStatement(displayTablesOnBook);
+            //all songs in database with their book information
+            String displayTablesOnSong="Select songs.SongID, songs.title, songs.composer, songs.FirstPage, songs.Lyrics, books.title, books.location FROM songs INNER JOIN books ON songs.BookID = books.BookID";
+            searcherSongsWithBookInfo=connect.prepareStatement(displayTablesOnSong);
+
+
+
             //new Song
             //Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument
-            //String, String, int, String, String, String, String, int, int, Boolean, String, String, String, String
+            //String, String, int, String, String, String, String, int, int, String, String, String, String, String
             String nSong= "INSERT INTO Songs (Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             newSong=connect.prepareStatement(nSong);
             //new Book
@@ -70,17 +95,10 @@ public class Main {
             delBook=connect.prepareStatement(dBook);
             String dBook2="DELETE FROM Songs WHERE BookID=?";
             delBook2=connect.prepareStatement(dBook2);
-            //to generate result set for display
-            //all songs of a book
-            String displayTablesOnBook="Select songs.title, songs.composer, songs.FirstPage, songs.Lyrics, books.title, books.location FROM songs INNER JOIN books ON songs.BookID = books.BookID WHERE books.Title = ?";
-            searcherSongsFromBook=connect.prepareStatement(displayTablesOnBook);
-            //all songs in database with their book information
-            String displayTablesOnSong="Select songs.title, songs.composer, songs.FirstPage, songs.Lyrics, books.title, books.location FROM songs INNER JOIN books ON songs.BookID = books.BookID";
-            searcherSongsWithBookInfo=connect.prepareStatement(displayTablesOnSong);
 
             //loadAllData(); TODO write function
-            //loadAllSongData();
-            //loadAllBookData();
+            loadAllSongData();
+            loadAllBookData();
             addTestData();
             //make TableModel
             //MusicBookDataModel mB=new MusicBookDataModel(rs);
@@ -94,7 +112,7 @@ public class Main {
         }
 
     }
-    public static void addSong(String title, String composer, int bookID, String genre, String style, String time, String key, Integer firstPage, Integer totalPages, Boolean lyrics, String lowestNote, String highestNote, String format, String instrument){
+    public static void addSong(String title, String composer, int bookID, String genre, String style, String time, String key, Integer firstPage, Integer totalPages, String lyrics, String lowestNote, String highestNote, String format, String instrument){
         try {
             //searcherSongMulti.setString(1, "Title");
             searcherSongMulti.setString(1, title);//1 would be 2 if the statement worked as it ought to.
@@ -107,7 +125,7 @@ public class Main {
                 resultsCounter++;
             }
             //Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument
-            ////String, String, int, String, String, String, String, int, int, Boolean, String, String, String, String
+            ////String, String, int, String, String, String, String, int, int, String, String, String, String, String
             if (resultsCounter == 0) {//if there is no entry, add it
                 newSong.setString(1, title);
                 newSong.setString(2, composer);
@@ -118,7 +136,7 @@ public class Main {
                 newSong.setString(7, key);
                 newSong.setInt(8, firstPage);
                 newSong.setInt(9, totalPages);
-                newSong.setBoolean(10, lyrics);
+                newSong.setString(10, lyrics);
                 newSong.setString(11, lowestNote);
                 newSong.setString(12, highestNote);
                 newSong.setString(13, format);
@@ -242,8 +260,8 @@ public class Main {
                     //make new table
                     if (tableName.equalsIgnoreCase("Songs")){
                         //Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument
-                        //String, String, int, String, String, String, String, int, int, Boolean, String, String, String, String
-                        String newTable = "CREATE TABLE if NOT EXISTS Songs (SongID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, TotalPages int, Lyrics BOOLEAN NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
+                        //String, String, int, String, String, String, String, int, int, String, String, String, String, String
+                        String newTable = "CREATE TABLE if NOT EXISTS Songs (SongID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (27), FirstPage int, TotalPages int, Lyrics VARCHAR (5) NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
                         statement.executeUpdate(newTable);
                     }else if (tableName.equalsIgnoreCase("Books")) {
                         String newTable = "CREATE TABLE if NOT EXISTS Books (BookID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Location VARCHAR (50), PRIMARY KEY (BookID))";
@@ -325,7 +343,7 @@ public class Main {
             //store test data
             testDataSong = new ArrayList<>();
             testDataBook = new ArrayList<>();
-            //Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, LastPage int, Lyrics BOOLEAN NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
+            //Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, LastPage int, Lyrics VARCHAR (5) NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
             ArrayList song1 = new ArrayList(Arrays.asList("Amarilli, mia bella", "Giulio Caccini", 1, "Classical", "Romantic", "4/4", "C major", 9, 5, true, "1low B", "1High D","Book", "Piano"));//number is what octave above or below middle C octave
             testDataSong.add(song1);
             ArrayList song2 = new ArrayList(Arrays.asList("'Tis a Gift to Be Simple", "Traditional", 2, "Folk", "American Quaker", "4/4", "G major", 1, 1, true, "C", "1High C", "Paper", "Piano" ));
@@ -356,7 +374,7 @@ public class Main {
                     newSong.setString(7, (String) songs.get(6));
                     newSong.setInt(8, (Integer) songs.get(7));
                     newSong.setInt(9, (Integer) songs.get(8));
-                    newSong.setBoolean(10, (Boolean) songs.get(9));
+                    newSong.setString(10, (String) songs.get(9));
                     newSong.setString(11, (String) songs.get(10));
                     newSong.setString(12, (String) songs.get(11));
                     newSong.setString(13, (String) songs.get(12));
@@ -384,6 +402,17 @@ public class Main {
             se.printStackTrace();
         }
     }
+
+    public static ResultSet getSongRs(){
+        loadAllSongData();
+        return rsSong;
+    }
+
+    public static ResultSet getBookRs(){
+        loadAllBookData();
+        return rsBook;
+    }
+
     public static void shutDown() {
 
         try {
