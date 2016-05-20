@@ -15,7 +15,8 @@ public class SongDataModel extends AbstractTableModel {
     public SongDataModel(ResultSet results){
         resultSet=results;
         setup();
-        Main.addTestData();
+        //Main.addTestData();
+        //Main.loadAllSongData();
     }
 
     private void setup(){

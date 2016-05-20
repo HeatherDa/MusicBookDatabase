@@ -140,7 +140,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="1f9b5" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="1f9b5" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Add a new Book"/>
@@ -150,7 +150,7 @@
                 <children>
                   <component id="e142f" class="javax.swing.JTextField" binding="bookTitleTextField" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="256" height="24"/>
                       </grid>
                     </constraints>
@@ -158,27 +158,9 @@
                       <text value="Book Title?"/>
                     </properties>
                   </component>
-                  <component id="a9f67" class="javax.swing.JTextField" binding="ISBNTextField" default-binding="true">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="256" height="24"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <text value="ISBN?"/>
-                    </properties>
-                  </component>
-                  <component id="cfe0b" class="javax.swing.JComboBox" binding="bookLocationComboBox">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="256" height="26"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <component id="d699e" class="javax.swing.JButton" binding="addNewBookButton" default-binding="true">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="256" height="32"/>
                       </grid>
                     </constraints>
@@ -188,7 +170,7 @@
                   </component>
                   <component id="a2b41" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Title of the Book"/>
@@ -196,7 +178,7 @@
                   </component>
                   <component id="9a13b" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Book ISBN number"/>
@@ -204,10 +186,34 @@
                   </component>
                   <component id="579dd" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Book Location"/>
+                    </properties>
+                  </component>
+                  <component id="cfe0b" class="javax.swing.JComboBox" binding="bookLocationComboBox">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="256" height="26"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="ad96a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="New Book Title?"/>
+                    </properties>
+                  </component>
+                  <component id="16a4b" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Location of Book?"/>
                     </properties>
                   </component>
                 </children>

@@ -15,7 +15,8 @@ public class BookDataModel extends AbstractTableModel{
     public BookDataModel (ResultSet results){
         resultSet=results;
         setup();
-        Main.addTestData();
+        //Main.addTestData();
+        //Main.loadAllBookData();
     }
 
     private void setup(){
@@ -31,7 +32,7 @@ public class BookDataModel extends AbstractTableModel{
     public void updateResultSet(ResultSet newRS){
         resultSet=newRS;
         setup();
-        fireTableDataChanged(); //this would make the table refresh, but it won't work because it's not static
+        fireTableDataChanged();
     }
 
     private void countRows() {
@@ -58,11 +59,10 @@ public class BookDataModel extends AbstractTableModel{
     }
     @Override
     public int getColumnCount(){
-        //something, don't really need this
         return colCount;
     }
     @Override
-    public Object getValueAt(int row, int col){//wanted to use this instead of getItemAt, but making it static made it not override.
+    public Object getValueAt(int row, int col){
         try{
             resultSet.absolute(row+1);
             Object o=resultSet.getObject(col+1);

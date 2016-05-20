@@ -413,6 +413,118 @@ public class Main {
         return rsBook;
     }
 
+    public static ArrayList<String> allBookTitles() {//TODO test me
+        ResultSet bookTitles = null;
+        ArrayList<String>bTitles=new ArrayList<>();
+        try {
+            String searching="Select books.title from books" ;
+            bookTitles=statement.executeQuery(searching);
+
+            while(bookTitles.next()){
+                bTitles.add(bookTitles.getString("Title"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bTitles;
+    }
+    public static ArrayList<String> allSongTitles(){
+        ResultSet songTitles = null;
+        ArrayList<String> sTitles=new ArrayList<>();
+        try {
+            String searching="Select songs.title from songs" ;
+            songTitles=statement.executeQuery(searching);
+
+            while(songTitles.next()){
+                sTitles.add(songTitles.getString("Title"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sTitles;
+    }
+
+    public static ArrayList<String> allSongComposers(){
+        ResultSet songComposers = null;
+        ArrayList<String>sComp=new ArrayList<>();
+        try {
+            String searching="Select songs.Composer from songs" ;
+            songComposers=statement.executeQuery(searching);
+            while(songComposers.next()){
+                sComp.add(songComposers.getString("Composer"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sComp;
+    }
+
+    public static ArrayList<String> allSongKeys(){
+        ResultSet songKey = null;
+        ArrayList<String>sKey=new ArrayList<>();
+        try {
+            String searching="Select songs.KeySignature from songs" ;
+            songKey=statement.executeQuery(searching);
+            while(songKey.next()){
+                sKey.add(songKey.getString("KeySignature"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sKey;
+    }
+
+    public static ArrayList<String> allSongGenres(){
+        ResultSet songGenre = null;
+        ArrayList<String>sGenre=new ArrayList<>();
+        try {
+            String searching="Select songs.Genre from songs" ;
+            songGenre=statement.executeQuery(searching);
+            while(songGenre.next()){
+                sGenre.add(songGenre.getString("Genre"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sGenre;
+    }
+
+    public static ArrayList<String> allSongStyles(){
+        ResultSet songStyle = null;
+        ArrayList<String>sStyle=new ArrayList<>();
+        try {
+            String searching="Select songs.Style from songs" ;
+            songStyle=statement.executeQuery(searching);
+            while(songStyle.next()){
+                sStyle.add(songStyle.getString("Style"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sStyle;
+    }
+
+    public static ArrayList<String> allSongInstruments(){
+        ResultSet songInstrument = null;
+        ArrayList<String>sInst=new ArrayList<>();
+        try {
+            String searching="Select songs.Instrument from songs" ;
+            songInstrument=statement.executeQuery(searching);
+            while(songInstrument.next()){
+                sInst.add(songInstrument.getString("Instrument"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sInst;
+    }
+
+
+
+
+
+
     public static void shutDown() {
 
         try {
@@ -502,4 +614,6 @@ public class Main {
 
             System.out.println("Program finished");
     }
+
+
 }

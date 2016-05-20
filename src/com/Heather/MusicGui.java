@@ -4,13 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 /**
  * Created by cryst on 5/4/2016.
  */
-public class MusicGui extends JFrame{
+public class MusicGui extends JFrame {
     private JPanel rootPanel;
     private JTabbedPane containerTabbedPane;
 
@@ -34,9 +36,7 @@ public class MusicGui extends JFrame{
 
     //new Book components
     private JTabbedPane newBookTabbedPane;
-
     private JTextField bookTitleTextField;
-    private JTextField ISBNTextField;
     private JComboBox bookLocationComboBox;
     private JButton addNewBookButton;
 
@@ -59,7 +59,9 @@ public class MusicGui extends JFrame{
     private DefaultListModel<String> listModel;
     private Boolean editEntry;
 
-    protected MusicGui(final SongDataModel songDataModel, final BookDataModel bookDataModel){
+    private ArrayList<String> searchText;
+
+    protected MusicGui(final SongDataModel songDataModel, final BookDataModel bookDataModel) {
         setContentPane(rootPanel);
         pack();
         setTitle("Sheet Music Inventory");
@@ -74,50 +76,57 @@ public class MusicGui extends JFrame{
         fillLowestComboBox();
         fillHighestComboBox();
         fillBookLocationComboBox();
-        searchSongTitleComboBox;
-        searchBookTitleComboBox;
-        searchComposerComboBox;
-        searchKeyComboBox;
-        searchGenreComboBox;
-        searchStyleComboBox;
-        searchInstrumentComboBox;
+        setSearchComboBoxes();
 
         //assigning table models
-        searchResultsTable.setGridColor (Color.black);
+        searchResultsTable.setGridColor(Color.black);
         searchResultsTable.setModel(songDataModel);
         BookTable.setGridColor(Color.black);
         BookTable.setModel(bookDataModel);
         //assinging combobox models
 
 
-
+        genreComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String Genre = genreComboBox.getSelectedItem().toString();
+                if (!Genre.equalsIgnoreCase("Blues")) {
+                    styleComboBox.removeAllItems();
+                    fillStyleComboBox();
+                }
+            }
+        });
 
         addSongButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String songName = songTitleTextBox.getText().trim();
-                String songComp= composerTextField.getText().trim();
-                String songGenre=genreComboBox.getSelectedItem().toString();
-                String songStyle=styleComboBox.getSelectedItem().toString();
-                boolean songL=lyricsRadioButton.isSelected();
+                String songComp = composerTextField.getText().trim();
+                String songGenre = genreComboBox.getSelectedItem().toString();
+                String songStyle = styleComboBox.getSelectedItem().toString();
+                boolean songL = lyricsRadioButton.isSelected();
                 String songLyrics;
-                if (songL){songLyrics="Lyrics";}//convert boolean to string so easier to understand in table than 1 or 0
-                else{songLyrics="No Lyrics";}
-                String songKey=keyComboBox.getSelectedItem().toString();
-                String songTime=timeSignatureTextField.getText().trim();
-                String songInst=instrumentTextField.getText().trim();
-                int firstPage=Integer.parseInt(firstPageTextField.getText());
-                int totalPage=Integer.parseInt(totalPagesTextField.getText());
-                String format=formatComboBox.getSelectedItem().toString();
-                String low=lowestComboBox.getSelectedItem().toString();
-                String high=highestComboBox.getSelectedItem().toString();
+                if (songL) {
+                    songLyrics = "Lyrics";
+                }//convert boolean to string so easier to understand in table than 1 or 0
+                else {
+                    songLyrics = "No Lyrics";
+                }
+                String songKey = keyComboBox.getSelectedItem().toString();
+                String songTime = timeSignatureTextField.getText().trim();
+                String songInst = instrumentTextField.getText().trim();
+                int firstPage = Integer.parseInt(firstPageTextField.getText());
+                int totalPage = Integer.parseInt(totalPagesTextField.getText());
+                String format = formatComboBox.getSelectedItem().toString();
+                String low = lowestComboBox.getSelectedItem().toString();
+                String high = highestComboBox.getSelectedItem().toString();
 
-                int currentBookRow=BookTable.getSelectedRow();
+                int currentBookRow = BookTable.getSelectedRow();
 
-                if(currentBookRow ==-1){
+                if (currentBookRow == -1) {
                     JOptionPane.showMessageDialog(rootPane, "Please select a book.  If the book is not listed, add a new book under add book tab.");
                 }
-                int bookID= (int) bookDataModel.getValueAt(currentBookRow, 0);
+                int bookID = (int) bookDataModel.getValueAt(currentBookRow, 0);
                 System.out.println(bookID);
 
                 Main.addSong(songName, songComp, bookID, songGenre, songStyle, songTime, songKey, firstPage, totalPage, songLyrics, low, high, format, songInst);
@@ -125,9 +134,49 @@ public class MusicGui extends JFrame{
             }
         });
 
+        addNewBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String bookName = bookTitleTextField.getText().trim();
+                String location = bookLocationComboBox.getSelectedItem().toString();
+
+                Main.addBook(bookName, location);
+            }
+        });
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String songTitle = searchSongTitleComboBox.getSelectedItem().toString();
+                String bookTitle = searchBookTitleComboBox.getSelectedItem().toString();
+                String songComposer = searchComposerComboBox.getSelectedItem().toString();
+                String songGenre = searchGenreComboBox.getSelectedItem().toString();
+                String songStyle = searchStyleComboBox.getSelectedItem().toString();
+                String songKey = searchKeyComboBox.getSelectedItem().toString();
+                String songInstrument = searchInstrumentComboBox.getSelectedItem().toString();
+                searchText = new ArrayList<>();
+                if (songTitle != null) {
+                    searchText.add("songs.Title=" + songTitle);
+                }
+                if (bookTitle != null) {
+                    searchText.add("books.Title=" + bookTitle);
+                }
+                if (songComposer != null) {
+                    searchText.add("songs.Composer=" + songComposer);
+                }
+                if (songGenre != null) {
+                    searchText.add("songs.Genre=" + songGenre);
+                }
+                if (songStyle != null) {
+                    searchText.add("songs.Style=" + songStyle);
+                }
+                if (songKey != null) {
+                    searchText.add("songs.Key=" + songKey);
+                }
+                if (songInstrument != null) {
+                    searchText.add("songs.Instrument=" + songInstrument);
+                }
+
 
             }
         });
@@ -142,14 +191,15 @@ public class MusicGui extends JFrame{
         deleteEntryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!editEntry) {//nothing selected, can't delete anything
+                if (!editEntry) {//nothing selected, can't delete anything
                     JOptionPane.showMessageDialog(rootPane, "Select a record to delete it.");
-                }else{//something is selected, so proceed with deletion
-                    String name=songTitleTextBox.getText();
+                } else {//something is selected, so proceed with deletion
+                    String name = songTitleTextBox.getText();
 
-                    Main.deleteSong(String.valueOf(name));//need songID
+                    // Main.deleteSong(String.valueOf(name));//need songID//TODO fix it
                 }//move selected row to absolute row and delete that row to delete a selected row
                 songDataModel.updateResultSet(Main.getSongRs());
+                bookDataModel.updateResultSet(Main.getBookRs());
             }
         });
 
@@ -161,6 +211,39 @@ public class MusicGui extends JFrame{
             }
         });
     }
+
+    private void setSearchComboBoxes() {
+        ArrayList<String> allBookTitles = Main.allBookTitles();
+        for (String n:allBookTitles){
+            searchBookTitleComboBox.addItem(n);
+        }
+        ArrayList<String> allSongTitles = Main.allSongTitles();
+        for (String n:allSongTitles){
+            searchSongTitleComboBox.addItem(n);
+        }
+        ArrayList<String> allSongComp = Main.allSongComposers();//not adding?
+        for (String n:allSongComp){
+            searchComposerComboBox.addItem(n);
+        }
+        ArrayList<String> allSongGenres = Main.allSongGenres();
+        for (String n:allSongGenres){
+            searchGenreComboBox.addItem(n);
+        }
+        ArrayList<String> allSongStyles = Main.allSongStyles();
+        for (String n:allSongStyles){
+            searchStyleComboBox.addItem(n);
+        }
+        ArrayList<String> allSongKeys = Main.allSongKeys();
+        for (String n:allSongKeys){
+            searchKeyComboBox.addItem(n);
+        }
+        ArrayList<String> allSongInstruments = Main.allSongInstruments();
+        for (String n:allSongInstruments){
+            searchInstrumentComboBox.addItem(n);
+        }
+    }
+
+
 
     private void fillKeyComboBox(){
         keyComboBox.addItem("C Major, A Minor, 0");
@@ -199,18 +282,18 @@ public class MusicGui extends JFrame{
         lowestComboBox.addItem("B");
     }
     private void fillHighestComboBox(){
-        lowestComboBox.addItem("C");
-        lowestComboBox.addItem("C#/Db");
-        lowestComboBox.addItem("D");
-        lowestComboBox.addItem("D#/Eb");
-        lowestComboBox.addItem("E");
-        lowestComboBox.addItem("F");
-        lowestComboBox.addItem("F#/Gb");
-        lowestComboBox.addItem("G");
-        lowestComboBox.addItem("G#/Ab");
-        lowestComboBox.addItem("A");
-        lowestComboBox.addItem("A#/Bb");
-        lowestComboBox.addItem("B");
+        highestComboBox.addItem("C");
+        highestComboBox.addItem("C#/Db");
+        highestComboBox.addItem("D");
+        highestComboBox.addItem("D#/Eb");
+        highestComboBox.addItem("E");
+        highestComboBox.addItem("F");
+        highestComboBox.addItem("F#/Gb");
+        highestComboBox.addItem("G");
+        highestComboBox.addItem("G#/Ab");
+        highestComboBox.addItem("A");
+        highestComboBox.addItem("A#/Bb");
+        highestComboBox.addItem("B");
     }
     private void fillBookLocationComboBox(){
         bookLocationComboBox.addItem("Livingroom Shelf 1a");
@@ -337,6 +420,5 @@ public class MusicGui extends JFrame{
             styleComboBox.addItem("Music Hall");
             styleComboBox.addItem("Show Tunes");
         }
-
     }
 }
