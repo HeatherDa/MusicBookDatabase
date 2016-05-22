@@ -98,12 +98,12 @@ public class Main {
 
             //loadAllData(); TODO write function
             loadAllSongData();
-            loadAllBookData();
+            //loadAllBookData();
             addTestData();
             //make TableModel
             //MusicBookDataModel mB=new MusicBookDataModel(rs);
             //make Gui
-            MusicGui gui=new MusicGui(songDataModel, bookDataModel);
+            MusicGui gui=new MusicGui(songDataModel);
 
 
 
@@ -261,7 +261,7 @@ public class Main {
                     if (tableName.equalsIgnoreCase("Songs")){
                         //Title, Composer, BookID, Genre, Style, TimeSignature, KeySignature, FirstPage, TotalPages, Lyrics, LowestNote, HighestNote, Format, Instrument
                         //String, String, int, String, String, String, String, int, int, String, String, String, String, String
-                        String newTable = "CREATE TABLE if NOT EXISTS Songs (SongID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (27), FirstPage int, TotalPages int, Lyrics VARCHAR (5) NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
+                        String newTable = "CREATE TABLE if NOT EXISTS Songs (SongID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (30), FirstPage int, TotalPages int, Lyrics VARCHAR (5) NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
                         statement.executeUpdate(newTable);
                     }else if (tableName.equalsIgnoreCase("Books")) {
                         String newTable = "CREATE TABLE if NOT EXISTS Books (BookID int NOT NULL AUTO_INCREMENT, Title VARCHAR (100) NOT NULL, Location VARCHAR (50), PRIMARY KEY (BookID))";
@@ -309,7 +309,7 @@ public class Main {
     }
 
     //make results list of all data from Book table
-    public static boolean loadAllBookData(){
+   /* public static boolean loadAllBookData(){
 
         try{
 
@@ -336,14 +336,14 @@ public class Main {
             return false;
         }
 
-    }
+    }*/
 
     public static void addTestData() {
         try {
             //store test data
             testDataSong = new ArrayList<>();
             testDataBook = new ArrayList<>();
-            //Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (8), FirstPage int, LastPage int, Lyrics VARCHAR (5) NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
+            //Title VARCHAR (100) NOT NULL, Composer VARCHAR (50), BookID int, Genre VARCHAR (50), Style VARCHAR (50), TimeSignature VARCHAR (5), KeySignature VARCHAR (30), FirstPage int, LastPage int, Lyrics VARCHAR (5) NOT NULL, LowestNote VARCHAR (8), HighestNote VARCHAR (8), Format VARCHAR (10)NOT NULL, Instrument VARCHAR (50), PRIMARY KEY (SongID))";
             ArrayList song1 = new ArrayList(Arrays.asList("Amarilli, mia bella", "Giulio Caccini", 1, "Classical", "Romantic", "4/4", "C major", 9, 5, true, "1low B", "1High D","Book", "Piano"));//number is what octave above or below middle C octave
             testDataSong.add(song1);
             ArrayList song2 = new ArrayList(Arrays.asList("'Tis a Gift to Be Simple", "Traditional", 2, "Folk", "American Quaker", "4/4", "G major", 1, 1, true, "C", "1High C", "Paper", "Piano" ));
@@ -408,9 +408,27 @@ public class Main {
         return rsSong;
     }
 
-    public static ResultSet getBookRs(){
+    /*public static ResultSet getBookRs(){
         loadAllBookData();
         return rsBook;
+    }*/
+    public static int getBookID(String title){
+        ResultSet bookid;
+        int bookID=0;
+
+        try {
+            String searching="Select BookID from books WHERE Title = "+title;
+            bookid=statement.executeQuery(searching);
+
+            while(bookid.next()) {
+                bookID = Integer.parseInt(bookid.getString("BookID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return bookID;
     }
 
     public static ArrayList<String> allBookTitles() {//TODO test me

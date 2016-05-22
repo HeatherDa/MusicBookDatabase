@@ -227,7 +227,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="f569b" layout-manager="GridLayoutManager" row-count="10" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="f569b" layout-manager="GridLayoutManager" row-count="8" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Add a New Song"/>
@@ -235,67 +235,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <scrollpane id="9af6">
-                    <constraints>
-                      <grid row="0" column="2" row-span="5" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <scrollpane id="834c0">
-                        <constraints/>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="3d081" class="javax.swing.JTable" binding="BookTable">
-                            <constraints/>
-                            <properties/>
-                          </component>
-                        </children>
-                      </scrollpane>
-                    </children>
-                  </scrollpane>
-                  <component id="e1600" class="javax.swing.JComboBox" binding="styleComboBox">
-                    <constraints>
-                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <component id="c2625" class="javax.swing.JComboBox" binding="genreComboBox">
-                    <constraints>
-                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <component id="4a2e1" class="javax.swing.JComboBox" binding="keyComboBox">
                     <constraints>
                       <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
-                  </component>
-                  <component id="26f7" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Key"/>
-                    </properties>
-                  </component>
-                  <component id="bfcb0" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Genre"/>
-                    </properties>
-                  </component>
-                  <component id="773d3" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Style"/>
-                    </properties>
                   </component>
                   <component id="81c6d" class="javax.swing.JTextField" binding="timeSignatureTextField" default-binding="true">
                     <constraints>
@@ -351,27 +295,9 @@
                       <text value="Song Title"/>
                     </properties>
                   </component>
-                  <component id="5b37a" class="javax.swing.JTextField" binding="firstPageTextField" default-binding="true">
-                    <constraints>
-                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="8d14d" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="First Page"/>
-                    </properties>
-                  </component>
                   <component id="7745a" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Total Pages"/>
@@ -379,7 +305,7 @@
                   </component>
                   <component id="13f2e" class="javax.swing.JTextField" binding="totalPagesTextField">
                     <constraints>
-                      <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -389,7 +315,7 @@
                   </component>
                   <component id="de328" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Instrument"/>
@@ -397,77 +323,145 @@
                   </component>
                   <component id="13f3b" class="javax.swing.JTextField" binding="instrumentTextField">
                     <constraints>
-                      <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="136eb" class="javax.swing.JComboBox" binding="formatComboBox">
-                    <constraints>
-                      <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                  </component>
                   <component id="9b6dc" class="javax.swing.JButton" binding="addSongButton" default-binding="true">
                     <constraints>
-                      <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Add Song"/>
                     </properties>
                   </component>
-                  <component id="b435c" class="javax.swing.JRadioButton" binding="lyricsRadioButton" default-binding="true">
+                  <component id="460aa" class="javax.swing.JComboBox" binding="bookTitleComboBox">
                     <constraints>
-                      <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="25a23" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Lyrics"/>
+                      <text value="Book Title"/>
+                    </properties>
+                  </component>
+                  <component id="26f7" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Key"/>
+                    </properties>
+                  </component>
+                  <component id="bfcb0" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Genre"/>
+                    </properties>
+                  </component>
+                  <component id="c2625" class="javax.swing.JComboBox" binding="genreComboBox">
+                    <constraints>
+                      <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="773d3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Style"/>
+                    </properties>
+                  </component>
+                  <component id="e1600" class="javax.swing.JComboBox" binding="styleComboBox">
+                    <constraints>
+                      <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="8d14d" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="First Page"/>
+                    </properties>
+                  </component>
+                  <component id="5b37a" class="javax.swing.JTextField" binding="firstPageTextField" default-binding="true">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
                     </properties>
                   </component>
                   <component id="1373c" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Format"/>
                     </properties>
                   </component>
+                  <component id="136eb" class="javax.swing.JComboBox" binding="formatComboBox">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
                   <component id="7d51" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Lowest note?"/>
                     </properties>
                   </component>
+                  <component id="bc660" class="javax.swing.JComboBox" binding="lowestComboBox">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
                   <component id="83991" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Highest note?"/>
                     </properties>
                   </component>
+                  <component id="3f389" class="javax.swing.JComboBox" binding="highestComboBox">
+                    <constraints>
+                      <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
                   <component id="37a93" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Are there lyrics?"/>
                     </properties>
                   </component>
-                  <component id="bc660" class="javax.swing.JComboBox" binding="lowestComboBox">
+                  <component id="2e169" class="javax.swing.JCheckBox" binding="lyricsCheckBox">
                     <constraints>
-                      <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
-                  </component>
-                  <component id="3f389" class="javax.swing.JComboBox" binding="highestComboBox">
-                    <constraints>
-                      <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
+                    <properties>
+                      <text value="Check if yes."/>
+                    </properties>
                   </component>
                 </children>
               </grid>

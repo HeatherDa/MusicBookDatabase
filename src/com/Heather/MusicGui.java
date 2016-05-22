@@ -22,7 +22,6 @@ public class MusicGui extends JFrame {
     private JTextField composerTextField;
     private JComboBox styleComboBox;
     private JComboBox genreComboBox;
-    private JRadioButton lyricsRadioButton;
     private JTextField instrumentTextField;
     private JComboBox keyComboBox;
     private JTextField timeSignatureTextField;
@@ -32,7 +31,8 @@ public class MusicGui extends JFrame {
     private JComboBox formatComboBox;
     private JComboBox lowestComboBox;
     private JComboBox highestComboBox;
-    private JTable BookTable;
+    private JComboBox bookTitleComboBox;
+    private JCheckBox lyricsCheckBox;
 
     //new Book components
     private JTabbedPane newBookTabbedPane;
@@ -56,19 +56,20 @@ public class MusicGui extends JFrame {
     private JComboBox searchInstrumentComboBox;
 
 
+
     private DefaultListModel<String> listModel;
     private Boolean editEntry;
 
     private ArrayList<String> searchText;
 
-    protected MusicGui(final SongDataModel songDataModel, final BookDataModel bookDataModel) {
+    protected MusicGui(final SongDataModel songDataModel) {
         setContentPane(rootPanel);
         pack();
         setTitle("Sheet Music Inventory");
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
+        fillBookTitleComboBox();
         fillGenreComboBox();
         fillStyleComboBox();
         fillKeyComboBox();
@@ -81,10 +82,6 @@ public class MusicGui extends JFrame {
         //assigning table models
         searchResultsTable.setGridColor(Color.black);
         searchResultsTable.setModel(songDataModel);
-        BookTable.setGridColor(Color.black);
-        BookTable.setModel(bookDataModel);
-        //assinging combobox models
-
 
         genreComboBox.addActionListener(new ActionListener() {
             @Override
@@ -104,7 +101,7 @@ public class MusicGui extends JFrame {
                 String songComp = composerTextField.getText().trim();
                 String songGenre = genreComboBox.getSelectedItem().toString();
                 String songStyle = styleComboBox.getSelectedItem().toString();
-                boolean songL = lyricsRadioButton.isSelected();
+                boolean songL = lyricsCheckBox.isSelected();
                 String songLyrics;
                 if (songL) {
                     songLyrics = "Lyrics";
@@ -121,15 +118,12 @@ public class MusicGui extends JFrame {
                 String low = lowestComboBox.getSelectedItem().toString();
                 String high = highestComboBox.getSelectedItem().toString();
 
-                int currentBookRow = BookTable.getSelectedRow();
-
-                if (currentBookRow == -1) {
-                    JOptionPane.showMessageDialog(rootPane, "Please select a book.  If the book is not listed, add a new book under add book tab.");
-                }
-                int bookID = (int) bookDataModel.getValueAt(currentBookRow, 0);
-                System.out.println(bookID);
+                String bookTitle = bookTitleComboBox.getSelectedItem().toString();
+                int bookID=Main.getBookID(bookTitle);
 
                 Main.addSong(songName, songComp, bookID, songGenre, songStyle, songTime, songKey, firstPage, totalPage, songLyrics, low, high, format, songInst);
+                songTitleTextBox.setText("");
+                composerTextField.setText("");
 
             }
         });
@@ -141,6 +135,9 @@ public class MusicGui extends JFrame {
                 String location = bookLocationComboBox.getSelectedItem().toString();
 
                 Main.addBook(bookName, location);
+                bookTitleComboBox.removeAllItems();//clear current contents
+                fillBookTitleComboBox();//refresh contents to include new book
+                JOptionPane.showMessageDialog(rootPane, "New book added.");
             }
         });
 
@@ -199,7 +196,6 @@ public class MusicGui extends JFrame {
                     // Main.deleteSong(String.valueOf(name));//need songID//TODO fix it
                 }//move selected row to absolute row and delete that row to delete a selected row
                 songDataModel.updateResultSet(Main.getSongRs());
-                bookDataModel.updateResultSet(Main.getBookRs());
             }
         });
 
@@ -243,7 +239,12 @@ public class MusicGui extends JFrame {
         }
     }
 
-
+    private void fillBookTitleComboBox(){
+        ArrayList<String> allBookTitles = Main.allBookTitles();
+        for (String n:allBookTitles){
+            bookTitleComboBox.addItem(n);
+        }
+    }
 
     private void fillKeyComboBox(){
         keyComboBox.addItem("C Major, A Minor, 0");
