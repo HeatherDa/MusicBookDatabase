@@ -101,9 +101,9 @@ public class Main {
             //loadAllBookData();
             addTestData();
             //make TableModel
-            //MusicBookDataModel mB=new MusicBookDataModel(rs);
+            //SongDataModel sM=new SongDataModel(rsSong);
             //make Gui
-            MusicGui gui=new MusicGui(songDataModel);
+            MusicGui gui=new MusicGui();
 
 
 
@@ -290,13 +290,13 @@ public class Main {
             String getAllData = "SELECT * FROM Songs";
             rsSong = statement.executeQuery(getAllData);
 
-            if (songDataModel == null) {
+            /*if (songDataModel == null) {
                 //If no current songDataModel, then make one
                 songDataModel = new SongDataModel(rsSong);
-            } else {
+            } else {*/
                 //Or, if one already exists, update its ResultSet
                 songDataModel.updateResultSet(rsSong);
-            }
+            //}
 
             return true;
 
@@ -307,36 +307,6 @@ public class Main {
         }
 
     }
-
-    //make results list of all data from Book table
-   /* public static boolean loadAllBookData(){
-
-        try{
-
-            if (rsBook!=null) {
-                rsBook.close();
-            }
-
-            String getAllData = "SELECT * FROM Books";
-            rsBook = statement.executeQuery(getAllData);
-
-            if (bookDataModel == null) {
-                //If no current bookDataModel, then make one
-                bookDataModel = new BookDataModel(rsBook);
-            } else {
-                //Or, if one already exists, update its ResultSet
-                bookDataModel.updateResultSet(rsBook);
-            }
-
-            return true;
-
-        } catch (Exception e) {
-            System.out.println("Error loading or reloading Books Table");
-            e.printStackTrace();
-            return false;
-        }
-
-    }*/
 
     public static void addTestData() {
         try {
@@ -432,7 +402,7 @@ public class Main {
     }
 
     public static ArrayList<String> allBookTitles() {//TODO test me
-        ResultSet bookTitles = null;
+        ResultSet bookTitles;
         ArrayList<String>bTitles=new ArrayList<>();
         try {
             String searching="Select books.title from books" ;
@@ -447,7 +417,7 @@ public class Main {
         return bTitles;
     }
     public static ArrayList<String> allSongTitles(){
-        ResultSet songTitles = null;
+        ResultSet songTitles;
         ArrayList<String> sTitles=new ArrayList<>();
         try {
             String searching="Select songs.title from songs" ;
@@ -464,7 +434,7 @@ public class Main {
     }
 
     public static ArrayList<String> allSongComposers(){
-        ResultSet songComposers = null;
+        ResultSet songComposers;
         ArrayList<String>sComp=new ArrayList<>();
         try {
             String searching="Select songs.Composer from songs" ;
@@ -479,7 +449,7 @@ public class Main {
     }
 
     public static ArrayList<String> allSongKeys(){
-        ResultSet songKey = null;
+        ResultSet songKey;
         ArrayList<String>sKey=new ArrayList<>();
         try {
             String searching="Select songs.KeySignature from songs" ;
@@ -494,7 +464,7 @@ public class Main {
     }
 
     public static ArrayList<String> allSongGenres(){
-        ResultSet songGenre = null;
+        ResultSet songGenre;
         ArrayList<String>sGenre=new ArrayList<>();
         try {
             String searching="Select songs.Genre from songs" ;
@@ -509,7 +479,7 @@ public class Main {
     }
 
     public static ArrayList<String> allSongStyles(){
-        ResultSet songStyle = null;
+        ResultSet songStyle;
         ArrayList<String>sStyle=new ArrayList<>();
         try {
             String searching="Select songs.Style from songs" ;
@@ -524,7 +494,7 @@ public class Main {
     }
 
     public static ArrayList<String> allSongInstruments(){
-        ResultSet songInstrument = null;
+        ResultSet songInstrument;
         ArrayList<String>sInst=new ArrayList<>();
         try {
             String searching="Select songs.Instrument from songs" ;

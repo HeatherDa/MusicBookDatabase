@@ -62,8 +62,9 @@ public class MusicGui extends JFrame {
 
     private ArrayList<String> searchText;
 
-    protected MusicGui(final SongDataModel songDataModel) {
+    protected MusicGui() {
         setContentPane(rootPanel);
+        setPreferredSize(new Dimension(800, 600));
         pack();
         setTitle("Sheet Music Inventory");
         setVisible(true);
@@ -80,6 +81,7 @@ public class MusicGui extends JFrame {
         setSearchComboBoxes();
 
         //assigning table models
+        SongDataModel songDataModel = new SongDataModel();
         searchResultsTable.setGridColor(Color.black);
         searchResultsTable.setModel(songDataModel);
 
@@ -156,7 +158,8 @@ public class MusicGui extends JFrame {
                     searchText.add("songs.Title=" + songTitle);
                 }
                 if (bookTitle != null) {
-                    searchText.add("books.Title=" + bookTitle);
+                    int bookID=Main.getBookID(bookTitle);
+                    searchText.add("songs.BookID="+bookID);//Search by bookID in songs table
                 }
                 if (songComposer != null) {
                     searchText.add("songs.Composer=" + songComposer);
@@ -173,7 +176,10 @@ public class MusicGui extends JFrame {
                 if (songInstrument != null) {
                     searchText.add("songs.Instrument=" + songInstrument);
                 }
+                for (int parameter=0;parameter<searchText.size()-1;parameter++){//each entry represents the table/field combo as seen above
 
+
+                }
 
             }
         });

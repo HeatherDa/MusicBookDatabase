@@ -4,18 +4,17 @@ import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by cryst on 5/8/2016.
- */
+
 public class SongDataModel extends AbstractTableModel {
+
     private static int rowCount=0;
     private static int colCount=0;
     static ResultSet resultSet;
 
-    public SongDataModel(ResultSet results){
-        resultSet=results;
+    public SongDataModel(){
+        resultSet=Main.getSongRs();
         setup();
-        //Main.addTestData();
+        Main.addTestData();
         //Main.loadAllSongData();
     }
 
@@ -49,6 +48,7 @@ public class SongDataModel extends AbstractTableModel {
 
         } catch (SQLException se) {
             System.out.println("Error counting rows " + se);
+            se.printStackTrace();
         }
 
     }
